@@ -11,11 +11,23 @@ body{
 #game{
     text-align: center;
 }
+h1{
+    padding: 1em 2em;
+}
 
-input[type="number"]{
+.form{
+    width: 100%;
+    margin: 1em;
+}
+
+.form input[type="number"]{
     margin: 0.25em 0;
     padding: 0.25em;
     font-family: Arial;
+}
+
+.form input[type="submit"]{
+
 }
 
 table{
