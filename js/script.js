@@ -28,7 +28,6 @@
             }
 
 
-
         function init() {
             $('.message').html('');
             $('#win').html('');
@@ -132,8 +131,12 @@
                     var myTd = $('[data-row="' + i + '"][data-col="' + j + '"]');
                     var index = i * Math.sqrt(cells.length) + j;
                     if (cells[index].valuee == -1) {
-                        $(myTd).addClass("bomb").delay(500).fadeIn('slow');
+                        $(myTd).addClass("bomb");
                     }
+                    if (cells[index].valuee == -1 && $(myTd).hasClass("flag")) {
+                        $(myTd).removeClass("flag").addClass("smile");
+                    }
+
                 }
         }
 
