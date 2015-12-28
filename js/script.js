@@ -113,11 +113,24 @@
                     }
                 }
                  else {
-                    self.addClass("smile").off('click');
+                    self.addClass("mine-cell").off('click');
                     $('#win').html('Game Over').addClass("error").delay(5000).fadeOut('slow');
                     showMins();
                     //$('.hidden').removeClass("flag");
                     $('.cell').off('click');
+                    //disable put flags
+                    window.oncontextmenu = function () {
+
+                        $('.cell').mousedown(function(ev) {
+                            if(ev.which == 3)
+                            {
+                                return false;
+                            }
+
+                        });
+
+                    }
+
                 }
 
             });
@@ -363,7 +376,6 @@
                 if(ev.which == 3)
                 {
                     return false;
-
                 }
 
             });

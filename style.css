@@ -57,6 +57,10 @@ table td{
     background: #ee1100 url("images/bomb.png") no-repeat center;
 }
 
+.mine-cell{
+    background: #ee1100 url("images/plus.png") no-repeat center;
+}
+
 .smile{
     background: #ee1100 url("images/smile.png") no-repeat center;
 }
