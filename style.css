@@ -1,0 +1,74 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-size: 1em;
+    font-family: 'Fjalla One', sans-serif;
+}
+
+#game{
+    text-align: center;
+}
+
+input[type="number"]{
+    margin: 0.25em 0;
+    padding: 0.25em;
+    font-family: Arial;
+}
+
+table{
+    padding: 0;
+    margin: 0;
+    border-spacing: 0;
+    border-collapse: separate;
+
+}
+table td{
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #dddddd;
+    background: #ffffff;
+}
+
+.hidden{
+    background: #ffffff;
+    font-size: 0;
+}
+
+.bomb{
+    background: #ee1100 url("images/bomb.png") no-repeat center;
+}
+
+.smile{
+    background: #ee1100 url("images/smile.png") no-repeat center;
+}
+
+.empty{
+    background: #d9edf7;
+    font-size: 14px;
+}
+
+.flag{
+    background: #dadada url("images/location.png") no-repeat center;
+    font-size: 0;
+}
+
+.space{
+    background: #d9edf7;
+}
+
+.message{
+    height: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.error{
+    color: #ff1122;
+}
+.success{
+    color: #2dbe60;
+}
