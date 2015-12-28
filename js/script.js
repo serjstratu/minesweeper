@@ -8,30 +8,42 @@
         var mines = parseInt($("#mins").val(), 10);
         var space = columns*columns - mines;
         var flag = 0;
+        var timer = false;
+        var count = 0;
+        var gameWIn = false;
 
 
+        if (mines >= Math.pow(columns, 2)) {
+            $('.message').html('To much mines').addClass("error").delay(3000).fadeOut('slow');
+        }
 
-            if (mines >= Math.pow(columns, 2)) {
-                $('.message').html('To much mines').addClass("error").delay(3000).fadeOut('slow');
+        else if (columns >= 100 || mines >= 100) {
+            $('.message').html('Too high a value').addClass("error").delay(3000).fadeOut('slow');
+        }
+
+        else if (columns < 0 || mines < 0) {
+            $('.message').html('Fields cant be negative or equal 0').addClass("error").delay(3000).fadeOut('slow');
+        }
+
+        else{
+            init();
+        }
+
+
+        setInterval(function () {
+            if (timer) {
+                $('#score-time').html(("00" + count).slice(-3));
+                count++;
             }
-
-            else if (columns >= 100 || mines >= 100) {
-                $('.message').html('Too high a value').addClass("error").delay(3000).fadeOut('slow');
-            }
-
-            else if (columns < 0 || mines < 0) {
-                $('.message').html('Fields cant be negative or equal 0').addClass("error").delay(3000).fadeOut('slow');
-            }
-
-            else{
-                init();
-            }
-
+        }, 1000);
 
         function init() {
             $('.message').html('');
             $('#win').html('');
             $('#end').html('');
+
+            timer = true;
+            count = 0;
             cells = [];
             for (var i = 0; i < columns; i++) {
                 for (var j = 0; j < columns; j++) {
@@ -101,12 +113,13 @@
                 }
 
                 if (obj.valuee !== -1) {
-                    self.addClass("empty").removeClass("hidden").off('click');
+                    self.addClass("empty").removeClass("hidden").removeClass("flag").off('click');
                     var numItems = $('.empty').length;
 
                     //check win
                     var win = space - numItems;
                     if (win == 0){
+                        gameWIn = true;
                         $('.hidden').removeClass("flag");
                         $('#end').html('Win Game').addClass("success").delay(5000).fadeOut('slow');
                         showMins();
@@ -114,29 +127,16 @@
                 }
                  else {
                     self.addClass("mine-cell").off('click');
+                    timer = false;
                     $('#win').html('Game Over').addClass("error").delay(5000).fadeOut('slow');
                     showMins();
-                    //$('.hidden').removeClass("flag");
                     $('.cell').off('click');
-                    //disable put flags
-                    window.oncontextmenu = function () {
-
-                        $('.cell').mousedown(function(ev) {
-                            if(ev.which == 3)
-                            {
-                                return false;
-                            }
-
-                        });
-
-                    }
+                    gameWIn = true;
 
                 }
 
             });
         }
-
-
 
         function showMins() {
             for (var i = 0; i < columns; i++)
@@ -334,17 +334,12 @@
                 floodFill(x, y+1);
             }
 
-
         }
-
-        //function startGame(){
-            //init();
+            //call functions
             placeMines();
             calcNeighbours();
             drawTable();
             clickCell();
-
-
 
 
         function shuffle(o) {
@@ -362,40 +357,14 @@
             return x;
         }
 
-        window.oncontextmenu = function () {
-
-            $('.hidden').mousedown(function(ev) {
-                if(ev.which == 3)
-                {
-                    $( this ).toggleClass('flag');
-
-                }
-
-            });
-            $('.empty').mousedown(function(ev) {
-                if(ev.which == 3)
-                {
-                    return false;
-                }
-
-            });
-
-            return false;     // cancel default menu
-        }
-
-        //$('.empty').bind('contextmenu', function(e) {
-        //    return false;
-        //});
-
-
-
-        //document.getElementById('hidden').oncontextmenu = function() {
-        //    alert('right click!')
-        //}
-
-
+        $(document).on("contextmenu", '.hidden', function (event) {
+            event.preventDefault();
+            if (!gameWIn){
+                $( this ).toggleClass('flag');
+            }
+            return false;
+        });
 
     });
-
 
 })(jQuery)
