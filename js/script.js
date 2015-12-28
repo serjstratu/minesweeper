@@ -10,7 +10,7 @@
         var flag = 0;
         var timer = false;
         var count = 0;
-        var gameWIn = false;
+        var gameWin = false;
 
 
         if (mines >= Math.pow(columns, 2)) {
@@ -100,11 +100,24 @@
 
         }
 
+        $(document).on("contextmenu", '.hidden', function (event) {
+            event.preventDefault();
+            if (!gameWin){
+                $( this ).toggleClass('flag');
+            }
+            return false;
+        });
+
         function clickCell() {
             $('.cell').on('click', function () {
                 var self = $(this);
                 var x = self.data('row');
                 var y = self.data('col');
+
+
+                if ($('.hidden').hasClass("flag")){
+                    $(this).off('click');
+                }
 
                 var obj = cells.filter(function (el) { return el.x === x && el.y === y })[0]
                 if(obj.valuee == 0){
@@ -119,7 +132,7 @@
                     //check win
                     var win = space - numItems;
                     if (win == 0){
-                        gameWIn = true;
+                        gameWin = true;
                         $('.hidden').removeClass("flag");
                         $('#end').html('Win Game').addClass("success").delay(5000).fadeOut('slow');
                         showMins();
@@ -131,7 +144,7 @@
                     $('#win').html('Game Over').addClass("error").delay(5000).fadeOut('slow');
                     showMins();
                     $('.cell').off('click');
-                    gameWIn = true;
+                    gameWin = true;
 
                 }
 
@@ -149,7 +162,6 @@
                     if (cells[index].valuee == -1 && $(myTd).hasClass("flag")) {
                         $(myTd).removeClass("flag").addClass("smile");
                     }
-
                 }
         }
 
@@ -237,7 +249,6 @@
             }
 
             if(cells[index].open === false && x-1 >= 0 && y-1 >= 0 && ((x-1)*columns+(y-1)) < columns*columns ){
-
                 var cIndex = (x-1)*columns+(y-1);
                 if (cells[cIndex].valuee !== -1 && cells[cIndex].valuee !== 0){
                     cells[cIndex].open = true;
@@ -247,7 +258,6 @@
             }
 
             if(cells[index].open === false && x-1>=0 && y+1 >= 0 && ((x-1)*columns+(y+1)) < columns*columns ){
-
                 var cIndex = (x-1)*columns+(y+1);
                 if (cells[cIndex].valuee !== -1 && cells[cIndex].valuee !== 0){
                     cells[cIndex].open = true;
@@ -257,7 +267,6 @@
             }
 
             if(cells[index].open === false && x+1>=0 && y-1 >= 0 && ((x+1)*columns+(y-1)) < columns*columns ){
-
                 var cIndex = (x+1)*columns+(y-1);
                 if (cells[cIndex].valuee !== -1 && cells[cIndex].valuee !== 0){
                     cells[cIndex].open = true;
@@ -267,7 +276,6 @@
             }
 
             if(cells[index].open === false && x+1>=0 && y+1 >= 0 && ((x+1)*columns+(y+1)) < columns*columns ){
-
                 var cIndex = (x+1)*columns+(y+1);
                 if (cells[cIndex].valuee !== -1 && cells[cIndex].valuee !== 0){
                     cells[cIndex].open = true;
@@ -277,7 +285,6 @@
             }
 
             if(cells[index].open === false && x-1 >= 0 && y >= 0 && ((x-1)*columns+y) < columns*columns ){
-
                 var cIndex = (x-1)*columns+y;
                 if (cells[cIndex].valuee !== -1 && cells[cIndex].valuee !== 0){
                     cells[cIndex].open = true;
@@ -287,7 +294,6 @@
             }
 
             if(cells[index].open === false && x+1 >= 0 && y >= 0 && ((x+1)*columns+y) < columns*columns ){
-
                 var cIndex = (x+1)*columns+y;
                 if (cells[cIndex].valuee !== -1 && cells[cIndex].valuee !== 0){
                     cells[cIndex].open = true;
@@ -297,7 +303,6 @@
             }
 
             if(cells[index].open === false && x >= 0 && y-1 >= 0 && (x*columns+(y-1)) < columns*columns ){
-
                 var cIndex = x*columns+(y-1);
                 if (cells[cIndex].valuee !== -1 && cells[cIndex].valuee !== 0){
                     cells[cIndex].open = true;
@@ -307,7 +312,6 @@
             }
 
             if(cells[index].open === false && x >= 0 && y+1 >= 0 && (x*columns+(y+1)) < columns*columns ){
-
                 var cIndex = x*columns+(y+1);
                 if (cells[cIndex].valuee !== -1 && cells[cIndex].valuee !== 0){
                     cells[cIndex].open = true;
@@ -357,13 +361,7 @@
             return x;
         }
 
-        $(document).on("contextmenu", '.hidden', function (event) {
-            event.preventDefault();
-            if (!gameWIn){
-                $( this ).toggleClass('flag');
-            }
-            return false;
-        });
+
 
     });
 
