@@ -3,6 +3,7 @@ $( document ).ready(function() {
     $("#start").on("click", function () {
         $('#game>table').remove();
         $(document).off("contextmenu");
+        clearInterval(time);
         var cells = [];
         var columns = parseInt($("#columns").val(), 10);
         var mines = parseInt($("#mins").val(), 10);
@@ -11,7 +12,6 @@ $( document ).ready(function() {
         var timer = false;
         var count = 0;
         var gameWinOrLose = false;
-
 
         if (mines >= Math.pow(columns, 2)) {
             $('.message').html('To much mines').addClass("error").delay(3000).fadeOut('slow');
@@ -29,13 +29,13 @@ $( document ).ready(function() {
             //init();
         }
 
-
-        setInterval(function () {
+        var time = setInterval(function () {
             if (timer) {
                 $('#score-time').html((count));
                 count++;
             }
         }, 1000);
+
 
         function init() {
             $('.message').html('');
@@ -44,6 +44,7 @@ $( document ).ready(function() {
 
             timer = true;
             count = 0;
+
             cells = [];
             for (var i = 0; i < columns; i++) {
                 for (var j = 0; j < columns; j++) {
