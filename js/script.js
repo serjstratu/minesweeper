@@ -115,9 +115,9 @@
                 var y = self.data('col');
 
 
-                if ($('.hidden').hasClass("flag")){
-                    $(this).off('click');
-                }
+                //if ($('.hidden').hasClass("flag")){
+                //    $(this).off('click');
+                //}
 
                 var obj = cells.filter(function (el) { return el.x === x && el.y === y })[0]
                 if(obj.valuee == 0){
@@ -360,8 +360,6 @@
             var x = a.y - b.y;
             return x;
         }
-
-
 
     });
 
