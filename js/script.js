@@ -1,8 +1,10 @@
-(function ($) {
+$( document ).ready(function() {
+    console.log( "ready!" );
+    //(function ($) {
     'use strict';
     $("#start").on("click", function () {
         $('#game>table').remove();
-
+        $(document).off("contextmenu");
         var cells = [];
         var columns = parseInt($("#columns").val(), 10);
         var mines = parseInt($("#mins").val(), 10);
@@ -10,7 +12,7 @@
         var flag = 0;
         //var timer = false;
         //var count = 0;
-        var gameWin = false;
+        var gameWinOrLose = false;
 
 
         if (mines >= Math.pow(columns, 2)) {
@@ -26,7 +28,7 @@
         }
 
         else{
-            init();
+            //init();
         }
 
 
@@ -78,15 +80,14 @@
                     tdcell.attr("data-col", j);
                     tdcell.addClass("cell");
                     tdcell.addClass("hidden");
-
                     var index = i * Math.sqrt(cells.length) + j;
-
                     $(tdcell).appendTo($(tr));
 
                 }
             }
 
             tablearea.appendChild(tbl);
+
         }
 
         function placeMines() {
@@ -100,24 +101,6 @@
 
         }
 
-        $(document).on("contextmenu", '.hidden', function (event) {
-            event.preventDefault();
-            if (!gameWin){
-                $( this ).toggleClass('flag');
-                if ($( this ).hasClass('flag')){
-                    $( this).off('click');
-                }else{
-                    clickCell();
-                }
-            }
-            return false;
-        });
-
-        $(document).on("contextmenu", '.empty', function (event) {
-            event.preventDefault();
-            return false;
-        });
-
 
 
         function clickCell() {
@@ -126,37 +109,40 @@
                 var x = self.data('row');
                 var y = self.data('col');
 
-                var obj = cells.filter(function (el) { return el.x === x && el.y === y })[0]
+                var obj = cells.filter(function (el) { return el.x === x && el.y === y })[0];
                 if(obj.valuee == 0){
                     floodFill(x,y);
                     self.removeClass("hidden");
                 }
 
-                if (obj.valuee !== -1) {
-                    self.addClass("empty").removeClass("hidden").removeClass("flag").off('click');
+                else if (obj.valuee !== -1) {
+                    self.addClass("empty").removeClass("hidden").removeClass("flag").unbind('click');
                     var numItems = $('.empty').length;
 
                     //check win
                     var win = space - numItems;
                     if (win == 0){
-                        gameWin = true;
+
                         $('.hidden').removeClass("flag");
                         $('#end').html('Win Game').addClass("success").delay(5000).fadeOut('slow');
                         showMins();
+                        gameWinOrLose = true;
                     }
                 }
-                 else {
-                    self.addClass("mine-cell").off('click');
+                else {
+                    self.addClass("mine-cell").unbind('click');
                     //timer = false;
                     $('#win').html('Game Over').addClass("error").delay(5000).fadeOut('slow');
-                    $('.cell').off('click');
+                    $('.cell').unbind('click');
                     showMins();
-                    gameWin = true;
+                    gameWinOrLose = true;
 
                 }
 
             });
         }
+
+
 
         function showMins() {
             for (var i = 0; i < columns; i++)
@@ -346,11 +332,14 @@
             }
 
         }
-            //call functions
-            placeMines();
-            calcNeighbours();
-            drawTable();
-            clickCell();
+        //call functions
+        init();
+        placeMines();
+        calcNeighbours();
+        drawTable();
+        clickCell();
+
+
 
 
         function shuffle(o) {
@@ -368,6 +357,28 @@
             return x;
         }
 
+            $(document).on("contextmenu", '.hidden', function (event) {
+                event.preventDefault();
+
+                if (!gameWinOrLose){
+                    event.stopPropagation();
+                    $( this ).toggleClass('flag');
+
+                    if ($(this).hasClass('flag')){
+                        $(this).unbind('click');
+
+                    }else{
+                        $(this).bind('click');
+                    }
+                }
+                return false;
+            });
+
+
+
+
     });
 
-})(jQuery)
+//})(jQuery)
+});
+

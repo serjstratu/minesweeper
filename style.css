@@ -42,6 +42,10 @@ table {
     border-spacing: 0;
 }
 
+img{
+    max-width: 100%;
+}
+
 /*********************My styles
 */
 body{
@@ -85,36 +89,39 @@ table td{
     height: 48px;
     text-align: center;
     cursor: pointer;
-    border: 1px solid #dddddd;
-    background: #ffffff;
+    border: 2px solid #ffffff;
+    background: #dddddd;
     vertical-align: middle;
+    border-radius: 5px;
+    color: #000;
+    font-size: 1.25em;
+    font-weight:  bold;
 
 }
 
 .hidden{
-    background: #ffffff;
+    background: #aaaaaa;
     font-size: 0;
 }
 
 .bomb{
-    background: #ee1100 url("images/bomb.png") no-repeat center;
+    background: #f03131 url("images/mine.png") no-repeat center;
 }
 
 .mine-cell{
-    background: #ee1100 url("images/plus.png") no-repeat center;
+    background: #f03131 url("images/plus.png") no-repeat center;
 }
 
 .smile{
-    background: #ee1100 url("images/smile.png") no-repeat center;
+    background: #f03131 url("images/smile.png") no-repeat center;
 }
 
 .empty{
-    background: #d9edf7;
-    font-size: 14px;
+    background: #a8d324;
 }
 
 .flag{
-    background: #edcf70 url("images/location.png") no-repeat center;
+    background: #ffc641 url("images/flag.png") no-repeat center;
     font-size: 0;
 }
 
