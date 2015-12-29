@@ -8,8 +8,8 @@
         var mines = parseInt($("#mins").val(), 10);
         var space = columns*columns - mines;
         var flag = 0;
-        var timer = false;
-        var count = 0;
+        //var timer = false;
+        //var count = 0;
         var gameWin = false;
 
 
@@ -30,20 +30,20 @@
         }
 
 
-        setInterval(function () {
-            if (timer) {
-                $('#score-time').html(("00" + count).slice(-3));
-                count++;
-            }
-        }, 1000);
+        //setInterval(function () {
+        //    if (timer) {
+        //        $('#score-time').html(("00" + count).slice(-3));
+        //        count++;
+        //    }
+        //}, 1000);
 
         function init() {
             $('.message').html('');
             $('#win').html('');
             $('#end').html('');
-
-            timer = true;
-            count = 0;
+            //
+            //timer = true;
+            //count = 0;
             cells = [];
             for (var i = 0; i < columns; i++) {
                 for (var j = 0; j < columns; j++) {
@@ -104,20 +104,27 @@
             event.preventDefault();
             if (!gameWin){
                 $( this ).toggleClass('flag');
+                if ($( this ).hasClass('flag')){
+                    $( this).off('click');
+                }else{
+                    clickCell();
+                }
             }
             return false;
         });
+
+        $(document).on("contextmenu", '.empty', function (event) {
+            event.preventDefault();
+            return false;
+        });
+
+
 
         function clickCell() {
             $('.cell').on('click', function () {
                 var self = $(this);
                 var x = self.data('row');
                 var y = self.data('col');
-
-
-                //if ($('.hidden').hasClass("flag")){
-                //    $(this).off('click');
-                //}
 
                 var obj = cells.filter(function (el) { return el.x === x && el.y === y })[0]
                 if(obj.valuee == 0){
@@ -140,10 +147,10 @@
                 }
                  else {
                     self.addClass("mine-cell").off('click');
-                    timer = false;
+                    //timer = false;
                     $('#win').html('Game Over').addClass("error").delay(5000).fadeOut('slow');
-                    showMins();
                     $('.cell').off('click');
+                    showMins();
                     gameWin = true;
 
                 }
