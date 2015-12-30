@@ -3,49 +3,33 @@ $( document ).ready(function() {
     $("#start").on("click", function () {
         $('#game>table').remove();
         $(document).off("contextmenu");
-        clearInterval(time);
         var cells = [];
         var columns = parseInt($("#columns").val(), 10);
         var mines = parseInt($("#mins").val(), 10);
         var space = columns*columns - mines;
-        var flag = 0;
-        var timer = false;
-        var count = 0;
         var gameWinOrLose = false;
 
-        if (mines >= Math.pow(columns, 2)) {
-            $('.message').html('To much mines').addClass("error").delay(3000).fadeOut('slow');
-        }
+        var clock;
+        var clicked = false;
+        var sec = 0;
 
-        else if (columns >= 100 || mines >= 100) {
-            //$('.message').html('Too high a value').addClass("error").delay(3000).fadeOut('slow');
-            document.getElementsByClassName('message').innerHTML += 'Too high a value';
-        }
-
-        else if (columns < 0 || mines < 0) {
-            $('.message').html('Fields cant be negative or equal 0').addClass("error").delay(3000).fadeOut('slow');
-        }
-
-        else{
-            //init();
-        }
-
-        var time = setInterval(function () {
-            if (timer) {
-                $('#score-time').html((count));
-                count++;
+        function validateFields(){
+            if (mines >= Math.pow(columns, 2)) {
+                $('.message').html('To much mines').addClass("error").delay(3000).fadeOut('slow');
             }
-        }, 1000);
 
+            else if (columns >= 100 ||columns < 0 || mines < 0) {
+                document.getElementsByClassName('message')[0].innerHTML += 'Value must be from 0 to 100';
+            }
+
+            else{
+                init();
+            }
+        }
 
         function init() {
             $('.message').html('');
-            $('#win').html('');
-            $('#end').html('');
-
-            timer = true;
-            count = 0;
-
+            startClock();
             cells = [];
             for (var i = 0; i < columns; i++) {
                 for (var j = 0; j < columns; j++) {
@@ -58,7 +42,6 @@ $( document ).ready(function() {
                             open: false
                         }
                     );
-
 
                 }
             }
@@ -85,9 +68,7 @@ $( document ).ready(function() {
 
                 }
             }
-
             tablearea.appendChild(tbl);
-
         }
 
         function placeMines() {
@@ -120,14 +101,13 @@ $( document ).ready(function() {
                     var win = space - numItems;
                     if (win == 0){
                         $('.hidden').removeClass("flag");
-                        timer = false;
                         gameWinOrLose = true;
                         winGame();
                     }
                 }
                 else {
                     self.addClass("mine-cell").unbind('click');
-                    timer = false;
+
                     $('.cell').unbind('click');
                     gameWinOrLose = true;
                     loseGame();
@@ -139,11 +119,13 @@ $( document ).ready(function() {
         function winGame(){
             document.getElementsByClassName('message')[0].innerHTML += 'Win Game';
             showMins();
+            stopClock();
         }
 
         function loseGame(){
             document.getElementsByClassName('message')[0].innerHTML += 'Game Over';
             showMins();
+            stopClock();
         }
 
 
@@ -333,12 +315,34 @@ $( document ).ready(function() {
             }
 
         }
+
+
         //call functions
+        validateFields();
         init();
         placeMines();
         calcNeighbours();
         drawTable();
         clickCell();
+
+
+        function startClock() {
+            if (clicked === false) {
+                clock = setInterval(stopWatch,1000);
+                clicked = true;
+            }
+            else if (clicked === true) {
+            }
+        }
+        function stopWatch() {
+            sec++;
+            document.getElementById("timer").innerHTML = sec;
+        }
+        function stopClock() {
+            window.clearInterval(clock);
+            document.getElementById("timer").innerHTML= sec;
+            clicked = false;
+        }
 
 
         function shuffle(o) {
