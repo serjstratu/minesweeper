@@ -18,7 +18,8 @@ $( document ).ready(function() {
         }
 
         else if (columns >= 100 || mines >= 100) {
-            $('.message').html('Too high a value').addClass("error").delay(3000).fadeOut('slow');
+            //$('.message').html('Too high a value').addClass("error").delay(3000).fadeOut('slow');
+            document.getElementsByClassName('message').innerHTML += 'Too high a value';
         }
 
         else if (columns < 0 || mines < 0) {
@@ -118,27 +119,32 @@ $( document ).ready(function() {
                     //check win
                     var win = space - numItems;
                     if (win == 0){
-
                         $('.hidden').removeClass("flag");
-                        $('#end').html('Win Game').addClass("success").delay(5000).fadeOut('slow');
                         timer = false;
-                        showMins();
                         gameWinOrLose = true;
+                        winGame();
                     }
                 }
                 else {
                     self.addClass("mine-cell").unbind('click');
                     timer = false;
-                    $('#win').html('Game Over').addClass("error").delay(5000).fadeOut('slow');
                     $('.cell').unbind('click');
-                    showMins();
                     gameWinOrLose = true;
-
+                    loseGame();
                 }
 
             });
         }
 
+        function winGame(){
+            document.getElementsByClassName('message')[0].innerHTML += 'Win Game';
+            showMins();
+        }
+
+        function loseGame(){
+            document.getElementsByClassName('message')[0].innerHTML += 'Game Over';
+            showMins();
+        }
 
 
         function showMins() {
