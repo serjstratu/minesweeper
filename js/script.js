@@ -4,9 +4,12 @@ $( document ).ready(function() {
         $('#game>table').remove();
         $(document).off("contextmenu");
 
+
+        //Global variables
         var cells = [];
         var columns = $("#columns").val();
         var mines = $("#mines").val();
+
         $('.bomb-count').html('');
 
         document.getElementsByClassName('bomb-count')[0].innerHTML += mines;
@@ -18,6 +21,11 @@ $( document ).ready(function() {
         var clicked = false;
         var sec = 0;
         //clearTimeout(clock);
+
+
+        function startGame(){
+
+        }
 
         function validateFields(){
             if (columns >= 99 || columns < 0 || mines <= 0) {
@@ -358,17 +366,7 @@ $( document ).ready(function() {
         }
 
 
-        function shuffle(o) {
-            for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-            return o;
-        }
 
-        function sortCells(a, b) {
-            var x = a.x - b.x;
-            if (x) return x;
-            var x = a.y - b.y;
-            return x;
-        }
 
         $(document).on("contextmenu", '.hidden', function (event) {
             event.preventDefault();
@@ -402,5 +400,19 @@ $( document ).ready(function() {
         });
 
     });
+
+
+    function shuffle(o) {
+        for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+        return o;
+    }
+
+    function sortCells(a, b) {
+        var x = a.x - b.x;
+        if (x) return x;
+        var x = a.y - b.y;
+        return x;
+    }
+
 });
 
