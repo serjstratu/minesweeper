@@ -1,41 +1,38 @@
-$( document ).ready(function() {
+(function ($) {
     'use strict';
+
+//Global variables
+    var columns, mines = 0;
+$( document ).ready(function() {
+
     $("#start").on("click", function () {
         $('#game>table').remove();
         $(document).off("contextmenu");
 
-
-        //Global variables
         var cells = [];
         var columns = $("#columns").val();
         var mines = $("#mines").val();
-
-        $('.bomb-count').html('');
-
-        document.getElementsByClassName('bomb-count')[0].innerHTML += mines;
-
         var space = columns*columns - mines;
         var gameWinOrLose = false;
 
         var clock;
         var clicked = false;
         var sec = 0;
-        //clearTimeout(clock);
+        $('.bomb-count').html('');
+        $('.clickcounter').html('0');
+
+        document.getElementsByClassName('bomb-count')[0].innerHTML += mines;
 
 
-        function startGame(){
 
-        }
 
         function validateFields(){
             if (columns >= 99 || columns < 0 || mines <= 0) {
-                //$('.message').html('To much mines').addClass("error").delay(3000).fadeOut('slow');
                 alert("Value must be from 0 to 99");
                 return false;
             }
 
             else if  (mines >= Math.pow(columns, 2)){
-                //document.getElementsByClassName('message')[0].innerHTML += 'Value must be from 0 to 100';
                 alert("To much mines");
                 return false;
             }
@@ -67,8 +64,7 @@ $( document ).ready(function() {
         }
 
 
-
-        function drawTable(mapData){
+        function drawTable(){
             var tablearea = document.getElementById('game');
             var tbl = document.createElement('table');
             for (var i = 0; i < columns; i++) {
@@ -110,6 +106,8 @@ $( document ).ready(function() {
                 var y = self.data('col');
 
                 var obj = cells.filter(function (el) { return el.x === x && el.y === y })[0];
+                $('.clickcounter').html(function(i, val) { return val*1+1 });
+
                 if(obj.valuee == 0){
                     floodFill(x,y);
                 }
@@ -137,17 +135,7 @@ $( document ).ready(function() {
             });
         }
 
-        function winGame(){
-            document.getElementsByClassName('message')[0].innerHTML += 'Win Game';
-            showMins();
-            stopClock();
-        }
 
-        function loseGame(){
-            document.getElementsByClassName('message')[0].innerHTML += 'Game Over';
-            showMins();
-            stopClock();
-        }
 
 
         function showMins() {
@@ -337,16 +325,6 @@ $( document ).ready(function() {
 
         }
 
-        //call functions
-
-        init();
-
-        placeMines();
-        calcNeighbours();
-        drawTable();
-        clickCell();
-
-
         function startClock() {
             if (clicked === false) {
                 clock = setInterval(stopWatch,1000);
@@ -399,20 +377,38 @@ $( document ).ready(function() {
             return false;
         });
 
+        function winGame(){
+            document.getElementsByClassName('message')[0].innerHTML += 'Win Game';
+            showMins();
+            stopClock();
+        }
+
+        function loseGame(){
+            document.getElementsByClassName('message')[0].innerHTML += 'Game Over';
+            showMins();
+            stopClock();
+        }
+
+        //call functions
+        init();
+        placeMines();
+        calcNeighbours();
+        drawTable();
+        clickCell();
+
     });
-
-
-    function shuffle(o) {
-        for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-        return o;
-    }
-
-    function sortCells(a, b) {
-        var x = a.x - b.x;
-        if (x) return x;
-        var x = a.y - b.y;
-        return x;
-    }
 
 });
 
+function shuffle(o) {
+    for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+}
+
+function sortCells(a, b) {
+    var x = a.x - b.x;
+    if (x) return x;
+    var x = a.y - b.y;
+    return x;
+}
+})(jQuery)
