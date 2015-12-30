@@ -1,10 +1,12 @@
 (function ($) {
     'use strict';
 
-//Global variables
+    //Global variables
     var columns, mines = 0;
-$( document ).ready(function() {
-
+    var gameWinOrLose = false;
+    var clock;
+    var clicked = false;
+    var sec = 0;
     $("#start").on("click", function () {
         $('#game>table').remove();
         $(document).off("contextmenu");
@@ -13,18 +15,13 @@ $( document ).ready(function() {
         var columns = $("#columns").val();
         var mines = $("#mines").val();
         var space = columns*columns - mines;
-        var gameWinOrLose = false;
+        sec = 0;
 
-        var clock;
-        var clicked = false;
-        var sec = 0;
+
         $('.bomb-count').html('');
         $('.clickcounter').html('0');
 
         document.getElementsByClassName('bomb-count')[0].innerHTML += mines;
-
-
-
 
         function validateFields(){
             if (columns >= 99 || columns < 0 || mines <= 0) {
@@ -101,12 +98,12 @@ $( document ).ready(function() {
 
         function clickCell() {
             $('.cell').on('click', function () {
+                $('.clickcounter').html(function(i, val) { return val*1+1 });
                 var self = $(this);
                 var x = self.data('row');
                 var y = self.data('col');
 
                 var obj = cells.filter(function (el) { return el.x === x && el.y === y })[0];
-                $('.clickcounter').html(function(i, val) { return val*1+1 });
 
                 if(obj.valuee == 0){
                     floodFill(x,y);
@@ -136,8 +133,6 @@ $( document ).ready(function() {
         }
 
 
-
-
         function showMins() {
             for (var i = 0; i < columns; i++)
                 for (var j = 0; j < columns; j++) {
@@ -153,7 +148,6 @@ $( document ).ready(function() {
         }
 
         function calcNeighbours() {
-
             for (var i = 0; i < columns; i++) {
                 for (var j = 0; j < columns; j++) {
                     var index = i * columns + j;
@@ -346,36 +340,6 @@ $( document ).ready(function() {
 
 
 
-        $(document).on("contextmenu", '.hidden', function (event) {
-            event.preventDefault();
-
-            if (!gameWinOrLose){
-                event.stopPropagation();
-                $( this ).toggleClass('flag');
-
-                if ($(this).hasClass('flag')){
-                    $(this).unbind('click');
-
-                }else{
-                    $(this).bind(clickCell());
-                }
-            }
-            return false;
-        });
-
-        $(document).on("contextmenu", '.empty', function (event) {
-            event.preventDefault();
-            if (!gameWinOrLose){
-                event.stopPropagation();
-                if ($(this).hasClass('flag')){
-                    $(this).removeClass("flag").removeClass("empty").addClass("hidden");
-                    $(this).bind(clickCell());
-                }else{
-                    $(this).unbind('click');
-                }
-            }
-            return false;
-        });
 
         function winGame(){
             document.getElementsByClassName('message')[0].innerHTML += 'Win Game';
@@ -389,26 +353,62 @@ $( document ).ready(function() {
             stopClock();
         }
 
+        function rightClick(){
+            $(document).on("contextmenu", '.hidden', function (event) {
+                event.preventDefault();
+
+                if (!gameWinOrLose){
+                    event.stopPropagation();
+                    $( this ).toggleClass('flag');
+
+                    if ($(this).hasClass('flag')){
+                        $(this).unbind('click');
+
+                    }else{
+                        $(this).bind(clickCell());
+                    }
+                }
+                return false;
+            });
+
+            $(document).on("contextmenu", '.empty', function (event) {
+                event.preventDefault();
+                if (!gameWinOrLose){
+                    event.stopPropagation();
+                    if ($(this).hasClass('flag')){
+                        $(this).removeClass("flag").removeClass("empty").addClass("hidden");
+                        $(this).bind(clickCell());
+                    }else{
+                        $(this).unbind('click');
+                    }
+                }
+                return false;
+            });
+        }
+
         //call functions
         init();
         placeMines();
         calcNeighbours();
         drawTable();
         clickCell();
+        rightClick();
 
     });
 
-});
 
-function shuffle(o) {
-    for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-    return o;
-}
 
-function sortCells(a, b) {
-    var x = a.x - b.x;
-    if (x) return x;
-    var x = a.y - b.y;
-    return x;
-}
+
+
+    function shuffle(o) {
+        for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+        return o;
+    }
+
+    function sortCells(a, b) {
+        var x = a.x - b.x;
+        if (x) return x;
+        var x = a.y - b.y;
+        return x;
+    }
 })(jQuery)
