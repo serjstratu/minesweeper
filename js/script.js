@@ -3,23 +3,33 @@ $( document ).ready(function() {
     $("#start").on("click", function () {
         $('#game>table').remove();
         $(document).off("contextmenu");
+
         var cells = [];
-        var columns = parseInt($("#columns").val(), 10);
-        var mines = parseInt($("#mins").val(), 10);
+        var columns = $("#columns").val();
+        var mines = $("#mines").val();
+        $('.bomb-count').html('');
+
+        document.getElementsByClassName('bomb-count')[0].innerHTML += mines;
+
         var space = columns*columns - mines;
         var gameWinOrLose = false;
 
         var clock;
         var clicked = false;
         var sec = 0;
+        //clearTimeout(clock);
 
         function validateFields(){
-            if (mines >= Math.pow(columns, 2)) {
-                $('.message').html('To much mines').addClass("error").delay(3000).fadeOut('slow');
+            if (columns >= 99 || columns < 0 || mines <= 0) {
+                //$('.message').html('To much mines').addClass("error").delay(3000).fadeOut('slow');
+                alert("Value must be from 0 to 99");
+                return false;
             }
 
-            else if (columns >= 100 ||columns < 0 || mines < 0) {
-                document.getElementsByClassName('message')[0].innerHTML += 'Value must be from 0 to 100';
+            else if  (mines >= Math.pow(columns, 2)){
+                //document.getElementsByClassName('message')[0].innerHTML += 'Value must be from 0 to 100';
+                alert("To much mines");
+                return false;
             }
 
             else{
@@ -29,6 +39,7 @@ $( document ).ready(function() {
 
         function init() {
             $('.message').html('');
+
             startClock();
             cells = [];
             for (var i = 0; i < columns; i++) {
@@ -46,6 +57,8 @@ $( document ).ready(function() {
                 }
             }
         }
+
+
 
         function drawTable(mapData){
             var tablearea = document.getElementById('game');
@@ -316,10 +329,10 @@ $( document ).ready(function() {
 
         }
 
-
         //call functions
-        validateFields();
+
         init();
+
         placeMines();
         calcNeighbours();
         drawTable();
