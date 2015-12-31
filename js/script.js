@@ -6,6 +6,7 @@
     var clock;
     var clicked = false;
     var sec = 0;
+    var aviablebombs = 0;
     $("#start").on("click", function () {
         $('#game>table').remove();
         $(document).off("contextmenu");
@@ -16,6 +17,7 @@
         var bombs = mines;
         var space = columns*columns - mines;
         sec = 0;
+
         var gameWinOrLose = false;
         $('.bomb-count').html('');
         $('.clickcounter').html('0');
@@ -23,24 +25,13 @@
 
         document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
 
-        function validateFields(){
-            if (columns >= 99 || columns < 0 || mines <= 0) {
-                alert("Value must be from 0 to 99");
-                return false;
-            }
-
-            else if  (mines >= Math.pow(columns, 2)){
-                alert("To much mines");
-                return false;
-            }
-
-            else{
-                init();
-            }
-        }
-
         function init() {
             $('.message').html('');
+
+            var aviablebombs = Math.pow(columns, 2)-1;
+            var input = document.getElementById("mines");
+            input.setAttribute("max",aviablebombs);
+
             sec = 0;
             startClock();
             cells = [];
@@ -309,7 +300,6 @@
         function checkWin(){
             var numItems = $('.empty').length;
             var win = space - numItems;
-            console.log(win);
             if (win == 0){
                 $('.hidden').removeClass("flag");
                 gameWinOrLose = true;
@@ -339,8 +329,8 @@
 
                     if ($(this).hasClass('flag')){
                         $(this).unbind('click');
-                        checkWin();
                         bombs--;
+                        checkWin();
                     }else{
                         $(this).bind(clickCell());
                         bombs++;
@@ -360,6 +350,7 @@
                         $(this).bind(clickCell());
                     }else{
                         $(this).unbind('click');
+                        checkWin();
                     }
                     $('.bomb-count').html('');
                     document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
