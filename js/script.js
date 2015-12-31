@@ -3,7 +3,6 @@
 
     //Global variables
     var columns, mines = 0;
-
     var clock;
     var clicked = false;
     var sec = 0;
@@ -47,7 +46,6 @@
             cells = [];
             for (var i = 0; i < columns; i++) {
                 for (var j = 0; j < columns; j++) {
-
                     cells.push(
                         {
                             x: i,
@@ -56,7 +54,6 @@
                             open: false
                         }
                     );
-
                 }
             }
         }
@@ -103,29 +100,17 @@
                 var self = $(this);
                 var x = self.data('row');
                 var y = self.data('col');
-
                 var obj = cells.filter(function (el) { return el.x === x && el.y === y })[0];
-
-
                 if(obj.valuee == 0){
                     floodFill(x,y);
                 }
 
                 else if (obj.valuee !== -1) {
                     self.addClass("empty").removeClass("hidden").unbind('click');
-                    var numItems = $('.empty').length;
-
-                    //check win
-                    var win = space - numItems;
-                    if (win == 0){
-                        $('.hidden').removeClass("flag");
-                        gameWinOrLose = true;
-                        winGame();
-                    }
+                    checkWin();
                 }
                 else {
                     self.addClass("mine-cell").unbind('click');
-
                     $('.cell').unbind('click');
                     gameWinOrLose = true;
                     loseGame();
@@ -134,9 +119,8 @@
             });
         }
 
-
         function showMins() {
-            for (var i = 0; i < columns; i++)
+            for (var i = 0; i < columns; i++) {
                 for (var j = 0; j < columns; j++) {
                     var myTd = $('[data-row="' + i + '"][data-col="' + j + '"]');
                     var index = i * Math.sqrt(cells.length) + j;
@@ -147,6 +131,7 @@
                         $(myTd).removeClass("flag").addClass("smile");
                     }
                 }
+            }
         }
 
         function calcNeighbours() {
@@ -321,27 +306,16 @@
 
         }
 
-        function startClock() {
-            if (clicked === false) {
-                clock = setInterval(stopWatch,1000);
-                clicked = true;
+        function checkWin(){
+            var numItems = $('.empty').length;
+            var win = space - numItems;
+            console.log(win);
+            if (win == 0){
+                $('.hidden').removeClass("flag");
+                gameWinOrLose = true;
+                winGame();
             }
-            else if (clicked === true) {
-            }
         }
-        function stopWatch() {
-            sec++;
-            document.getElementById("timer").innerHTML = sec;
-        }
-        function stopClock() {
-            window.clearInterval(clock);
-            document.getElementById("timer").innerHTML= sec;
-            clicked = false;
-        }
-
-
-
-
 
         function winGame(){
             document.getElementsByClassName('message')[0].innerHTML += 'Win Game';
@@ -365,9 +339,8 @@
 
                     if ($(this).hasClass('flag')){
                         $(this).unbind('click');
+                        checkWin();
                         bombs--;
-
-
                     }else{
                         $(this).bind(clickCell());
                         bombs++;
@@ -405,10 +378,23 @@
 
     });
 
-
-
-
-
+    function startClock() {
+        if (clicked === false) {
+            clock = setInterval(stopWatch,1000);
+            clicked = true;
+        }
+        else if (clicked === true) {
+        }
+    }
+    function stopWatch() {
+        sec++;
+        document.getElementById("timer").innerHTML = sec;
+    }
+    function stopClock() {
+        window.clearInterval(clock);
+        document.getElementById("timer").innerHTML= sec;
+        clicked = false;
+    }
     function shuffle(o) {
         for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
         return o;
