@@ -3,7 +3,7 @@
 
     //Global variables
     var columns, mines = 0;
-    var gameWinOrLose = false;
+
     var clock;
     var clicked = false;
     var sec = 0;
@@ -14,14 +14,15 @@
         var cells = [];
         var columns = $("#columns").val();
         var mines = $("#mines").val();
+        var bombs = mines;
         var space = columns*columns - mines;
         sec = 0;
-
-
+        var gameWinOrLose = false;
         $('.bomb-count').html('');
         $('.clickcounter').html('0');
+        $('#timer').html('0');
 
-        document.getElementsByClassName('bomb-count')[0].innerHTML += mines;
+        document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
 
         function validateFields(){
             if (columns >= 99 || columns < 0 || mines <= 0) {
@@ -41,7 +42,7 @@
 
         function init() {
             $('.message').html('');
-
+            sec = 0;
             startClock();
             cells = [];
             for (var i = 0; i < columns; i++) {
@@ -104,6 +105,7 @@
                 var y = self.data('col');
 
                 var obj = cells.filter(function (el) { return el.x === x && el.y === y })[0];
+
 
                 if(obj.valuee == 0){
                     floodFill(x,y);
@@ -353,7 +355,7 @@
             stopClock();
         }
 
-        function rightClick(){
+
             $(document).on("contextmenu", '.hidden', function (event) {
                 event.preventDefault();
 
@@ -363,10 +365,15 @@
 
                     if ($(this).hasClass('flag')){
                         $(this).unbind('click');
+                        bombs--;
+
 
                     }else{
                         $(this).bind(clickCell());
+                        bombs++;
                     }
+                    $('.bomb-count').html('');
+                    document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
                 }
                 return false;
             });
@@ -381,10 +388,12 @@
                     }else{
                         $(this).unbind('click');
                     }
+                    $('.bomb-count').html('');
+                    document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
                 }
                 return false;
             });
-        }
+
 
         //call functions
         init();
@@ -392,7 +401,7 @@
         calcNeighbours();
         drawTable();
         clickCell();
-        rightClick();
+
 
     });
 
