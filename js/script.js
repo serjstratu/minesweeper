@@ -2,23 +2,22 @@
     'use strict';
 
     //Global variables
-    var columns, mines = 0;
+    $(document).off("contextmenu");
     var clock;
     var clicked = false;
     var sec = 0;
-    var aviablebombs = 0;
     $("#start").on("click", function () {
-        $('#game>table').remove();
-        $(document).off("contextmenu");
+        function reset(){
+            $('#game>table').remove();
+        }
 
         var cells = [];
         var columns = $("#columns").val();
         var mines = $("#mines").val();
         var bombs = mines;
         var space = columns*columns - mines;
-        sec = 0;
-
         var gameWinOrLose = false;
+
         $('.bomb-count').html('');
         $('.clickcounter').html('0');
         $('#timer').html('0');
@@ -26,12 +25,12 @@
         document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
 
         function init() {
+            reset();
             $('.message').html('');
 
             var aviablebombs = Math.pow(columns, 2)-1;
             var input = document.getElementById("mines");
             input.setAttribute("max",aviablebombs);
-
             sec = 0;
             startClock();
             cells = [];
@@ -319,7 +318,7 @@
             stopClock();
         }
 
-
+        function rightClick(){
             $(document).on("contextmenu", '.hidden', function (event) {
                 event.preventDefault();
 
@@ -357,7 +356,7 @@
                 }
                 return false;
             });
-
+        }
 
         //call functions
         init();
@@ -365,6 +364,7 @@
         calcNeighbours();
         drawTable();
         clickCell();
+        rightClick();
 
 
     });
