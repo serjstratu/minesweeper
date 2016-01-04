@@ -2,38 +2,43 @@
     'use strict';
 
     //Global variables
-    $(document).off("contextmenu");
-    var clock;
-    var clicked = false;
+    var columns, mines = 0;
     var sec = 0;
+    var timer = false;
+    var count = 0;
     $("#start").on("click", function (e) {
-        e.preventDefault();
-        function reset(){
-            $('#game>table').remove();
-        }
-
+        $('#game>table').remove();
+        $('.message').html('');
+        $(document).off("contextmenu");
+        timer = false;
+        count = 0;
         var cells = [];
         var columns = $("#columns").val();
         var mines = $("#mines").val();
         var bombs = mines;
         var space = columns*columns - mines;
-        var gameWinOrLose = false;
 
+
+        var gameWinOrLose = false;
         $('.bomb-count').html('');
-        $('.clickcounter').html('0');
+        $('#clickcounter').html('0');
         $('#timer').html('0');
 
         document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
 
-        function init() {
-            reset();
-            $('.message').html('');
 
+
+
+        startGame();
+
+        function startGame(){
+            console.log(1);
+        }
+
+        function init() {
             var aviablebombs = Math.pow(columns, 2)-1;
             var input = document.getElementById("mines");
             input.setAttribute("max",aviablebombs);
-            sec = 0;
-            startClock();
             cells = [];
             for (var i = 0; i < columns; i++) {
                 for (var j = 0; j < columns; j++) {
@@ -48,7 +53,6 @@
                 }
             }
         }
-
 
         function drawTable(){
             var tablearea = document.getElementById('game');
@@ -82,16 +86,20 @@
                 var y = cells[mines].y;
             }
             cells.sort(sortCells);
-
         }
 
         function clickCell() {
             $('.cell').on('click', function () {
-                $('.clickcounter').html(function(i, val) { return val*1+1 });
+                timer = true;
                 var self = $(this);
                 var x = self.data('row');
                 var y = self.data('col');
                 var obj = cells.filter(function (el) { return el.x === x && el.y === y })[0];
+
+                if ($(self).hasClass("hidden")){
+                    $('#clickcounter').html(function(i, val) { return val*1+1 });
+                }
+
                 if(obj.valuee == 0){
                     floodFill(x,y);
                 }
@@ -194,7 +202,6 @@
                 }
             }
         }
-
 
         function floodFill(x, y){
             var index = x * columns + y;
@@ -310,54 +317,53 @@
         function winGame(){
             document.getElementsByClassName('message')[0].innerHTML += 'Win Game';
             showMins();
-            stopClock();
+            timer = false;
         }
 
         function loseGame(){
             document.getElementsByClassName('message')[0].innerHTML += 'Game Over';
             showMins();
-            stopClock();
+            timer = false;
         }
 
 
-            $(document).on("contextmenu", '.hidden', function (event) {
-                event.preventDefault();
+        $(document).on("contextmenu", '.hidden', function (event) {
+            event.preventDefault();
 
-                if (!gameWinOrLose){
-                    event.stopPropagation();
-                    $( this ).toggleClass('flag');
+            if (!gameWinOrLose){
+                event.stopPropagation();
+                $( this ).toggleClass('flag');
 
-                    if ($(this).hasClass('flag')){
-                        $(this).unbind('click');
-                        bombs--;
-                        checkWin();
-                    }else{
-                        $(this).bind(clickCell());
-                        bombs++;
-                    }
-                    $('.bomb-count').html('');
-                    document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
+                if ($(this).hasClass('flag')){
+                    $(this).unbind('click');
+                    bombs--;
+                    checkWin();
+                }else{
+                    $(this).bind(clickCell());
+                    bombs++;
                 }
-                return false;
-            });
+                $('.bomb-count').html('');
+                document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
+            }
+            return false;
+        });
 
-            $(document).on("contextmenu", '.empty', function (event) {
-                event.preventDefault();
-                if (!gameWinOrLose){
-                    event.stopPropagation();
-                    if ($(this).hasClass('flag')){
-                        $(this).removeClass("flag").removeClass("empty").addClass("hidden");
-                        $(this).bind(clickCell());
-                    }else{
-                        $(this).unbind('click');
-                        checkWin();
-                    }
-                    $('.bomb-count').html('');
-                    document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
+        $(document).on("contextmenu", '.empty', function (event) {
+            event.preventDefault();
+            if (!gameWinOrLose){
+                event.stopPropagation();
+                if ($(this).hasClass('flag')){
+                    $(this).removeClass("flag").removeClass("empty").addClass("hidden");
+                    $(this).bind(clickCell());
+                }else{
+                    $(this).unbind('click');
+                    checkWin();
                 }
-                return false;
-            });
-
+                $('.bomb-count').html('');
+                document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
+            }
+            return false;
+        });
 
         //call functions
         init();
@@ -367,26 +373,18 @@
         clickCell();
 
 
-
     });
 
-    function startClock() {
-        if (clicked === false) {
-            clock = setInterval(stopWatch,1000);
-            clicked = true;
-        }
-        else if (clicked === true) {
-        }
-    }
-    function stopWatch() {
-        sec++;
-        document.getElementById("timer").innerHTML = sec;
-    }
-    function stopClock() {
-        window.clearInterval(clock);
-        document.getElementById("timer").innerHTML= sec;
-        clicked = false;
-    }
+
+
+        setInterval(function () {
+            if (timer) {
+                $('#timer').html(count);
+                count++;
+            }
+        }, 1000);
+
+
     function shuffle(o) {
         for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
         return o;
