@@ -9,9 +9,9 @@
 <body>
 <div class="form">
     <form action="javascript:void(0);" id="startGame">
-        <input type="number" id="columns" value="10" min="2" max="50" placeholder="Number of columns" pattern="[0-9]{2}" required="" />
-        <input type="number" id="mines" value="10" min="1" placeholder="Mins" pattern="[0-9]{2}" required="" />
-        <button id="start">Start game</button>
+        <input type="number" id="columns" value="10" min="1" max="50" placeholder="Number of columns" pattern="[0-9]{2}" required="" />
+        <input type="number" id="mines" value="10" min="1" max="1" placeholder="Mins" pattern="[0-9]{2}" required="" />
+        <input type="submit" id="start" value="Start game">
     </form>
 </div>
 
@@ -29,10 +29,10 @@
 
 </div>
 
-
+<div class="message"></div>
 
 <div id="game">
-    <div class="message"></div>
+
 </div>
 
 <script type="text/javascript" src="js/script.js"></script>

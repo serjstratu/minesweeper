@@ -3,42 +3,40 @@
 
     //Global variables
     var columns, mines = 0;
-    var sec = 0;
     var timer = false;
     var count = 0;
+    var cells = [];
+    $('.message').html('');
     $("#start").on("click", function (e) {
         $('#game>table').remove();
         $('.message').html('');
         $(document).off("contextmenu");
         timer = false;
         count = 0;
-        var cells = [];
+
         var columns = $("#columns").val();
         var mines = $("#mines").val();
+
         var bombs = mines;
         var space = columns*columns - mines;
 
-
         var gameWinOrLose = false;
+
         $('.bomb-count').html('');
         $('#clickcounter').html('0');
         $('#timer').html('0');
 
-        document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
-
-
-
-
-        startGame();
-
-        function startGame(){
-            console.log(1);
+        if (columns == 0 || mines == 0){
+            $('.message').html('Fields cant be negative or equal 0').addClass("error");
+            return false;
         }
 
+        var aviablebombs = Math.pow(columns, 2)-1;
+        var input = document.getElementById("mines");
+        input.setAttribute("max",aviablebombs);
+        document.getElementsByClassName('bomb-count')[0].innerHTML += bombs;
+
         function init() {
-            var aviablebombs = Math.pow(columns, 2)-1;
-            var input = document.getElementById("mines");
-            input.setAttribute("max",aviablebombs);
             cells = [];
             for (var i = 0; i < columns; i++) {
                 for (var j = 0; j < columns; j++) {
@@ -371,19 +369,14 @@
         calcNeighbours();
         drawTable();
         clickCell();
-
-
     });
 
-
-
-        setInterval(function () {
-            if (timer) {
-                $('#timer').html(count);
-                count++;
-            }
-        }, 1000);
-
+    setInterval(function () {
+        if (timer) {
+            $('#timer').html(count);
+            count++;
+        }
+    }, 1000);
 
     function shuffle(o) {
         for (var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
@@ -396,4 +389,4 @@
         var x = a.y - b.y;
         return x;
     }
-})(jQuery)
+})(jQuery);

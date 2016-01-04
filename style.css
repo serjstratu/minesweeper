@@ -81,7 +81,7 @@ body{
     outline: none;
 }
 
-.form button{
+.form input[type="submit"]{
     border-radius: 4px;
     background: #33b5e5;
     color: #ffffff;
@@ -163,14 +163,15 @@ table td{
 }
 
 .message{
-    position: absolute;
-    color: #ffffff;
-    left: 50%;
-    top: 50%;
-    /*margin-left: 50%;*/
-    /*margin-top: 50%;*/
+    width: 310px;
+    position: relative;
+    color: #2dbe60;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 2em;
+    border: 2px solid #dddddd;
+    border-radius: 4px;
+    margin: 12px auto 0;
+    text-align: center;
 }
 
 .error{
