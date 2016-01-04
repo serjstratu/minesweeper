@@ -66,8 +66,7 @@
                     var tdcell = $('<td>'+ number+ '</td>');
                     tdcell.attr("data-row", i);
                     tdcell.attr("data-col", j);
-                    tdcell.addClass("cell");
-                    tdcell.addClass("hidden");
+                    tdcell.addClass("cell hidden");
                     var index = i * Math.sqrt(cells.length) + j;
                     $(tdcell).appendTo($(tr));
 
@@ -319,7 +318,8 @@
         }
 
         function loseGame(){
-            document.getElementsByClassName('message')[0].innerHTML += 'Game Over';
+            //document.getElementsByClassName('message')[0].innerHTML += 'Game Over';
+            $('.message').html('Game Over').addClass("error");
             showMins();
             timer = false;
         }
