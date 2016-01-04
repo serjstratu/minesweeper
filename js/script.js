@@ -6,7 +6,8 @@
     var clock;
     var clicked = false;
     var sec = 0;
-    $("#start").on("click", function () {
+    $("#start").on("click", function (e) {
+        e.preventDefault();
         function reset(){
             $('#game>table').remove();
         }
@@ -318,7 +319,7 @@
             stopClock();
         }
 
-        function rightClick(){
+
             $(document).on("contextmenu", '.hidden', function (event) {
                 event.preventDefault();
 
@@ -356,7 +357,7 @@
                 }
                 return false;
             });
-        }
+
 
         //call functions
         init();
@@ -364,7 +365,7 @@
         calcNeighbours();
         drawTable();
         clickCell();
-        rightClick();
+
 
 
     });
